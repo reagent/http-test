@@ -1,23 +1,24 @@
 package main
 
 import (
-	// "fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+  "github.com/gin-gonic/gin"
 )
 
-func GET(a *App, path string) (*httptest.ResponseRecorder, *http.Request) {
+func GET(app *gin.Engine, path string) (*httptest.ResponseRecorder, *http.Request) {
 	recorder   := httptest.NewRecorder()
 	request, _ := http.NewRequest("GET", path, nil)
 
-	a.Router.ServeHTTP(recorder, request)
+	app.ServeHTTP(recorder, request)
 
 	return recorder, request
 }
 
 func TestGetReturnsSuccess(t *testing.T) {
-	app := newApp()
+	app := App()
 
 	r, _ := GET(app, "/")
 
@@ -27,7 +28,7 @@ func TestGetReturnsSuccess(t *testing.T) {
 }
 
 func TestGetReturnsFailure(t *testing.T) {
-  app := newApp()
+  app := App()
 
   r, _ := GET(app, "/missing")
 
